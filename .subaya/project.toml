@@ -4,10 +4,6 @@
 src = "."
 
 [[devices]]
-name = "A5EA008B (AXE5000)"
-device = "A5EA008B"
-
-[[devices]]
 name = "STM32C562RE (NUCLEO-C562RE)"
 device = "STM32C562RETx"
 
