@@ -19,7 +19,7 @@ device = "A5EC008B"
 name = "Agilex 5 A5EA008B"
 slug = "agilex-5-a5ea008b"
 path = "apps/detector-fpga"
-device = "A5EA008B (AXE5000)"
+device = "A5EC008B (AXE5000)"
 
 [[apps]]
 name = "STM32C562RE (NUCLEO-C562RE)"
