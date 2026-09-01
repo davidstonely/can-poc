@@ -12,7 +12,7 @@ name = "A5EC008B (AXE5000)"
 device = "A5EC008B"
 
 [[apps]]
-name = "Agilex 5 A5EA008B"
+name = "Agilex 5 A5EC008B (AXE5000)"
 slug = "agilex-5-a5ea008b"
 path = "apps/detector-fpga"
 device = "A5EC008B (AXE5000)"
