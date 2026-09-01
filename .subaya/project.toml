@@ -11,9 +11,6 @@ device = "A5EA008B"
 name = "STM32C562RE (NUCLEO-C562RE)"
 device = "STM32C562RETx"
 
-[[devices]]
-name = "A5EC008B"
-
 [[apps]]
 name = "Agilex 5 A5EA008B"
 slug = "agilex-5-a5ea008b"
