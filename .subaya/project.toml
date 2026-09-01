@@ -1,0 +1,25 @@
+# Subaya project config — https://subaya-dev.com/docs/project-toml
+
+[project]
+src = "."
+
+[[devices]]
+name = "A5EA008B (AXE5000)"
+device = "A5EA008B"
+
+[[devices]]
+name = "STM32C562RE (NUCLEO-C562RE)"
+device = "STM32C562RETx"
+
+[[apps]]
+name = "Agilex 5 A5EA008B"
+slug = "agilex-5-a5ea008b"
+path = "apps/detector-fpga"
+device = "A5EA008B (AXE5000)"
+
+[[apps]]
+name = "STM32C562RE (NUCLEO-C562RE)"
+slug = "stm32c562re-nucleo-c562re"
+path = "apps/cassette-mcu"
+device = "STM32C562RE (NUCLEO-C562RE)"
+ecosystem = "zephyr"
