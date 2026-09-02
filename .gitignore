@@ -1,5 +1,7 @@
-# Machine-local Subaya project binding (see .subaya/config.toml header)
-.subaya/
+# Machine-local Subaya project binding only. NOT the whole directory:
+# .subaya/project.toml is the COMMITTED project file (devices/apps) and is
+# maintained by Subaya's Git Sync worker — ignoring it would fight that.
+.subaya/config.toml
 
 # canon output — generated at build time from a pinned tag, never committed
 gen/
