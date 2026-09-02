@@ -1,0 +1,143 @@
+# Blocked-state baseline for Seiraiyu/subaya-platform#640 / #641
+# Captured 2026-08-31. DO NOT 'fix' by reinstalling the App — this is the repro fixture.
+
+## versions
+{
+  "version": "0.15.3",
+  "commit": "9bf0a61",
+  "date": "2026-08-28T15:00:11Z",
+  "api_version": "v1alpha1",
+  "go_version": "go1.23.12",
+  "os": "linux",
+  "arch": "amd64",
+  "bundle_version": "12"
+}
+
+## suya repo installations  (expect: data: [])
+{
+  "data": [],
+  "install_url": "https://github.com/apps/subaya-connector/installations/new?state=org%3A243"
+}
+
+## suya repo status --project 348  (expect: connected: false)
+{
+  "connected": false,
+  "owner": "",
+  "repo": "",
+  "full_name": "",
+  "default_branch": "",
+  "config_state": ""
+}
+
+## suya repo connect ... --installation 158042761
+suya: Unknown installation for this org.
+exit=4
+
+## GitHub-side truth
+installation id : 158042761  (target davidstonely, User, target_id 99307292)
+repo scope      : Only select repositories -> davidstonely/can-poc
+permissions     : metadata:read, administration:read+write, contents:read+write
+{"defaultBranchRef":{"name":""},"isEmpty":true,"nameWithOwner":"davidstonely/can-poc","visibility":"PUBLIC"}
+
+## suya doctor
+{
+  "ok": true,
+  "exit_code": 0,
+  "checks": [
+    {
+      "id": "version",
+      "title": "CLI and skill bundle are in step",
+      "status": "pass",
+      "detail": "suya 0.15.3, skill bundle v12 (/home/stonelyd/.claude/skills)",
+      "exit_code": 10
+    },
+    {
+      "id": "auth",
+      "title": "Authenticated to Subaya",
+      "status": "pass",
+      "detail": "david.stonely@oxos.com (org 243) on https://subaya-dev.com",
+      "exit_code": 11
+    },
+    {
+      "id": "git",
+      "title": "Inside a git work tree",
+      "status": "pass",
+      "detail": "/home/stonelyd/can-poc (origin https://github.com/davidstonely/can-poc.git)",
+      "exit_code": 12
+    },
+    {
+      "id": "repo",
+      "title": "Working tree matches the project's repo",
+      "status": "warn",
+      "detail": "the project has no repo connected",
+      "fix": "suya repo create               # create + scaffold one\nsuya repo connect --owner \u003co\u003e --repo \u003cr\u003e --installation \u003cid\u003e",
+      "exit_code": 13
+    },
+    {
+      "id": "binding",
+      "title": "Project context resolves here",
+      "status": "pass",
+      "detail": "project 348 (can-poc, fpga) from /home/stonelyd/can-poc/.subaya/config.toml",
+      "exit_code": 14
+    },
+    {
+      "id": "target",
+      "title": "Project has a device and an app",
+      "status": "pass",
+      "detail": "2 device(s), 2 app(s)",
+      "exit_code": 15
+    },
+    {
+      "id": "server",
+      "title": "Platform build is known, and the release channel is not behind it",
+      "status": "warn",
+      "detail": "the platform and this CLI are built from different commits (server main-32cd50b, this CLI from 9bf0a61) — so this CLI's version is not evidence of what the platform can do, in either direction. Read `commands.json` for the surface that actually exists (#589).",
+      "fix": "suya install --skills   # refresh the bundle; then read commands.json"
+    }
+  ]
+}
+
+
+################################################################
+# VERIFICATION 2026-08-31, after the #640/#641/#642/#643/#644 roll
+# Server main-baaa482. CLI still 0.15.3 / 9bf0a61, bundle 12.
+################################################################
+
+## #640 ACCEPTANCE MET — recovery of a PRE-EXISTING orphan
+# No uninstall/reinstall, no manual DB edit, and notably through the PRE-FIX CLI,
+# which confirms adopt-on-use is server-side.
+
+$ suya repo connect --project 348 --owner davidstonely --repo can-poc --installation 158042761
+{ "connected": true, "owner": "davidstonely", "repo": "can-poc",
+  "full_name": "davidstonely/can-poc", "default_branch": "master",
+  "config_state": "needs_config" }
+exit 0                              # was: "Unknown installation for this org." exit 4
+
+$ suya repo installations
+{ "data": [ { "installation_id": "158042761", "account_login": "davidstonely",
+              "suspended_at": "" } ], ... }      # was: data: []
+
+$ suya doctor        # repo row: warn -> PASS
+  pass | repo    | davidstonely/can-poc
+  pass | binding | project 348 (can-poc, fpga)
+  pass | target  | 2 device(s), 2 app(s)
+  overall ok=True exit=0
+
+## #642 FIXED
+$ suya profile show --project 348
+suya: no profile exists for this project yet — run brainstorm-embedded's or
+brainstorm-fpga's Phase 0 (whichever matches the target you are designing)
+# Names both, which is correct for a genuinely multi-target project.
+# Single-target derivation not testable here (348 has both arches).
+
+## #643 / #644 NOT VERIFIABLE — no CLI release cut
+$ suya update
+{ "current": "0.15.3", "latest": "v0.15.3", "updated": false, "action": "noop", ... }
+
+--app on docs create / req add / arch pin-plan create : ABSENT (all three)
+bundle_version embedded in this CLI                   : 12  (need v13 for #644)
+
+## OPEN: install_url still advertises the URL #641 replaced
+$ suya repo installations | grep install_url
+  "install_url": "https://github.com/apps/subaya-connector/installations/new?state=org%3A243"
+# A user following the CLI's own instruction still reaches the About-page dead end.

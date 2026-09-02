@@ -1,0 +1,17 @@
+# Machine-local Subaya project binding (see .subaya/config.toml header)
+.subaya/
+
+# canon output — generated at build time from a pinned tag, never committed
+gen/
+
+# Browser-automation scratch (playwright-cli)
+.playwright-cli/
+
+# Baselines are intentionally committed; nothing to ignore there.
+
+# Vendor documents — these live in the Subaya RAG corpus, not in the repo.
+# The AXE5000 guide, MCP251863 datasheet, Agilex 5 config guide and Mailbox
+# Client IP UG are all ingested and queryable via `suya rag`; a copy here would
+# duplicate them and bloat the tree.
+*.pdf
+*.PDF
